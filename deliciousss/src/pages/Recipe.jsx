@@ -13,11 +13,12 @@ function Recipe() {
     );
     const detailData = await data.json();
     setDetails(detailData);
-    console.log(detailData);
+    console.log("fetched details");
   };
 
   useEffect(() => {
     fetchDetails();
+    console.log(params.name);
   }, [params.name]);
 
   //o dangerouslySetInnerHTML usa-se quando temos um campo que devolve HTML, isto retira todas as quotes e tags html que o texto tem
@@ -41,9 +42,29 @@ function Recipe() {
         >
           Ingredients
         </Button>
-        <div>
-          <h3 dangerouslySetInnerHTML={{ __html: details.summary }}></h3>
-        </div>
+        {console.log(details.extendedIngredients)}
+        {
+          //é preciso ter uma das tabs abertas para que ele possa mostrar essa informação
+          activeTab === "instructions" && (
+            <div>
+              <br />
+              <h1>Summary</h1>
+              <h4 dangerouslySetInnerHTML={{ __html: details.summary }}></h4>
+              <br />
+              <h1>Instructions</h1>
+              <h4
+                dangerouslySetInnerHTML={{ __html: details.instructions }}
+              ></h4>
+            </div>
+          )
+        }
+        {activeTab === "ingredients" && (
+          <ul>
+            {details.extendedIngredients.map((ingredient) => {
+              <li key={ingredient.id}>{ingredient.original}</li>;
+            })}
+          </ul>
+        )}
       </Info>
     </DetailWrapper>
   );
